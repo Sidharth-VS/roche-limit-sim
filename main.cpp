@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include "Sphere.h"
+#include "Gravity.h"
 
 // -------------------- Shader Sources --------------------
 const char* vertexShaderSource = R"(
@@ -137,6 +138,8 @@ int main(){
     // Spheres
     Sphere mainSphere(1.0f,36,18);
     Sphere smallSphere(0.3f,36,18);
+    Body planet = Body(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), 10000.0f);
+    Body moon =Body(glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.447f, 0.0f), 10.0f);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -145,6 +148,8 @@ int main(){
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+        updateGravity(planet, moon, deltaTime);
 
         processInput(window);
 
@@ -169,12 +174,13 @@ int main(){
         GLuint colorLoc = glGetUniformLocation(shaderProgram,"color");
         glUniform3f(colorLoc,0.2f,0.7f,1.0f);
         mainSphere.draw();
-
+        
         // ---------------- Smaller Sphere (orbiting) ----------------
         glm::mat4 smallModel = glm::mat4(1.0f);
-        smallModel = glm::translate(smallModel, glm::vec3(2.5f, 0.0f, 0.0f)); // offset in x
+        smallModel = glm::translate(smallModel, moon.position); // offset in x
         GLuint smallModelLoc = glGetUniformLocation(shaderProgram, "model");
         glUniformMatrix4fv(smallModelLoc, 1, GL_FALSE, glm::value_ptr(smallModel));
+        glUniform3f(colorLoc,1.0f,0.5f,0.0f);
         smallSphere.draw();
 
         glfwSwapBuffers(window);
