@@ -158,7 +158,7 @@ int main(){
 
     Sphere planetSphere(1.0f, 36, 18);
     Sphere moonSphere(0.3f, 36, 18);
-    Sphere fragmentSphere(0.03f, 12, 12);
+    Sphere fragmentSphere(0.05f, 12, 12);
 
     Body planet(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f), 10000.0);
     Body moon(glm::vec3(8.0f,0.0f,0.0f), glm::vec3(0.0f, 0.7f, 0.4f), 100.0);
