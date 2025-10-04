@@ -8,4 +8,5 @@
 
 ## Command to compile: 
 ``g++ main.cpp src/glad.c -Iinclude -o sphere_app -lglfw -ldl -lGL``
-
+#### for Moon_Maker_test
+``g++ Moon_Maker_test.cpp src/glad.c -Iinclude -o moon_maker_test -lglfw -ldl -lGL``
