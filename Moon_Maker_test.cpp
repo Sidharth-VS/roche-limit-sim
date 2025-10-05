@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <cmath>
 
 #include "MoonMaker.h"
 #include "Sphere.h"
@@ -153,15 +154,45 @@ int main(){
     glDeleteShader(fragmentShader);
 
     // ---------------- Initial bodies ----------------
+    // Get user input for simulation parameters
+    float planetMass, planetRadius, moonMass, moonRadius;
+    float moonDistance, moonVelocityY, moonVelocityZ;
+
+    std::cout << "Enter planet mass: ";
+    std::cin >> planetMass;
+
+    std::cout << "Enter planet radius: ";
+    std::cin >> planetRadius;
+
+    std::cout << "Enter moon mass: ";
+    std::cin >> moonMass;
+
+    std::cout << "Enter moon radius: ";
+    std::cin >> moonRadius;
+
+    std::cout << "Enter moon distance from planet: ";
+    std::cin >> moonDistance;
+
+    std::cout << "Enter moon velocity (Y component): ";
+    std::cin >> moonVelocityY;
+
+    std::cout << "Enter moon velocity (Z component): ";
+    std::cin >> moonVelocityZ;
+
+    // Display orbital velocity recommendation
+    float orbitalVelocity = sqrt(0.001f * planetMass / moonDistance);
+    std::cout << "\nRecommended orbital velocity for stable orbit: " << orbitalVelocity << std::endl;
+    std::cout << "Your velocity magnitude: " << sqrt(moonVelocityY*moonVelocityY + moonVelocityZ*moonVelocityZ) << "\n" << std::endl;
+
     bool passed_roche_limit = false;
     bool fragment_initialized = false;
 
-    Sphere planetSphere(1.0f, 36, 18);
-    Sphere moonSphere(0.3f, 36, 18);
+    Sphere planetSphere(planetRadius, 36, 18);
+    Sphere moonSphere(moonRadius, 36, 18);
     Sphere fragmentSphere(0.05f, 12, 12);
 
-    Body planet(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f), 10000.0);
-    Body moon(glm::vec3(8.0f,0.0f,0.0f), glm::vec3(0.0f, 0.7f, 0.4f), 100.0);
+    Body planet(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f), planetMass);
+    Body moon(glm::vec3(moonDistance,0.0f,0.0f), glm::vec3(0.0f, moonVelocityY, moonVelocityZ), moonMass);
     std::vector<Body> fragments;
 
     glEnable(GL_DEPTH_TEST);
@@ -171,6 +202,9 @@ int main(){
         float currentFrame = (float)glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+        // Cap deltaTime to prevent numerical instability
+        if(deltaTime > 0.016f) deltaTime = 0.016f; // Max ~60 FPS
 
         processInput(window);
 
@@ -186,11 +220,11 @@ int main(){
 
         // ---------------- Update positions ----------------
         if(!passed_roche_limit)
-            passed_roche_limit = update_roche_status(planet, moon, 1.0, 0.3);
+            passed_roche_limit = update_roche_status(planet, moon, planetRadius, moonRadius);
 
         if(passed_roche_limit && !fragment_initialized){
             auto centers_and_masses = parallel_calculate_centres_and_mass_serial(
-                {moon.position.x, moon.position.y, moon.position.z}, 0.3, 0.05
+                {moon.position.x, moon.position.y, moon.position.z}, moonRadius, 0.05
             );
             for(auto &f : centers_and_masses){
                 fragments.emplace_back(

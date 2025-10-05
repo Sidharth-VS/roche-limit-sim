@@ -135,12 +135,33 @@ int main(){
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    // Get user input for simulation parameters
+    float planetMass, planetRadius, moonMass, moonRadius, moonVelocityY;
+    float moonDistance;
+
+    std::cout << "Enter planet mass: ";
+    std::cin >> planetMass;
+
+    std::cout << "Enter planet radius: ";
+    std::cin >> planetRadius;
+
+    std::cout << "Enter moon mass: ";
+    std::cin >> moonMass;
+
+    std::cout << "Enter moon radius: ";
+    std::cin >> moonRadius;
+
+    std::cout << "Enter moon distance from planet: ";
+    std::cin >> moonDistance;
+
+    std::cout << "Enter moon velocity (Y component): ";
+    std::cin >> moonVelocityY;
+
     // Spheres
-    Sphere mainSphere(1.0f,36,18);
-    Sphere smallSphere(0.3f,36,18);
-    Sphere smallSphere(0.3f,36,18);
-    Body planet = Body(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), 10000.0f);
-    Body moon =Body(glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.447f, 0.0f), 10.0f);
+    Sphere mainSphere(planetRadius, 36, 18);
+    Sphere smallSphere(moonRadius, 36, 18);
+    Body planet = Body(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), planetMass);
+    Body moon = Body(glm::vec3(moonDistance, 0.0f, 0.0f), glm::vec3(0.0f, moonVelocityY, 0.0f), moonMass);
 
     glEnable(GL_DEPTH_TEST);
 

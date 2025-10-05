@@ -16,13 +16,13 @@ class Body{
     glm::vec3 velocity;
     float mass;
     
-
+    
     Body(glm::vec3 pos, glm::vec3 vel, float m):position(pos), velocity(vel), mass(m){}
     
 };
+const float G = 0.01f;
 
 void updateGravity(Body& planet, Body& moon, float dTime){
-    const float G = 0.001f;
     glm::vec3 dir = planet.position - moon.position;
     float distance = glm::length(dir);
     glm::vec3 dirNorm = glm::normalize(dir);
@@ -36,7 +36,6 @@ void updateGravity(Body& planet, Body& moon, float dTime){
 
 }
 void parallelUpdateGravity(Body& planet, vector<Body>& fragments, float dTime){
-    const float G = 0.001f;
     #pragma omp parallel for
     for(auto& fragment : fragments){
         glm::vec3 dir = planet.position - fragment.position;
@@ -53,7 +52,7 @@ void parallelUpdateGravity(Body& planet, vector<Body>& fragments, float dTime){
 
 }
 void serialUpdateGravity(Body& planet, vector<Body>& fragments, float dTime){
-    const float G = 0.001f;
+
     for(auto& fragment : fragments){
         glm::vec3 dir = planet.position - fragment.position;
         float distance = glm::length(dir);
