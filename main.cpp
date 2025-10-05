@@ -138,6 +138,7 @@ int main(){
     // Spheres
     Sphere mainSphere(1.0f,36,18);
     Sphere smallSphere(0.3f,36,18);
+    Sphere smallSphere(0.3f,36,18);
     Body planet = Body(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), 10000.0f);
     Body moon =Body(glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.447f, 0.0f), 10.0f);
 

@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <iostream>
 #include <vector>
+#include <omp.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -34,9 +35,26 @@ void updateGravity(Body& planet, Body& moon, float dTime){
     moon.position += moon.velocity*dTime;
 
 }
-void updateGravity(Body& planet, vector<Body>& fragments, float dTime){
+void parallelUpdateGravity(Body& planet, vector<Body>& fragments, float dTime){
+    const float G = 0.001f;
+    #pragma omp parallel for
     for(auto& fragment : fragments){
-        const float G = 0.001f;
+        glm::vec3 dir = planet.position - fragment.position;
+        float distance = glm::length(dir);
+        glm::vec3 dirNorm = glm::normalize(dir);
+
+        float force = G*planet.mass*fragment.mass/(distance*distance);
+
+        glm::vec3 acc = (force/fragment.mass)*dirNorm;
+
+        fragment.velocity += acc*dTime;
+        fragment.position += fragment.velocity*dTime;
+    }
+
+}
+void serialUpdateGravity(Body& planet, vector<Body>& fragments, float dTime){
+    const float G = 0.001f;
+    for(auto& fragment : fragments){
         glm::vec3 dir = planet.position - fragment.position;
         float distance = glm::length(dir);
         glm::vec3 dirNorm = glm::normalize(dir);

@@ -189,7 +189,7 @@ int main(){
             passed_roche_limit = update_roche_status(planet, moon, 1.0, 0.3);
 
         if(passed_roche_limit && !fragment_initialized){
-            auto centers_and_masses = calculate_centres_and_mass_serial(
+            auto centers_and_masses = parallel_calculate_centres_and_mass_serial(
                 {moon.position.x, moon.position.y, moon.position.z}, 0.3, 0.05
             );
             for(auto &f : centers_and_masses){
@@ -204,7 +204,7 @@ int main(){
 
         // Gravity update
         if(fragment_initialized)
-            updateGravity(planet, fragments, deltaTime);
+            parallelUpdateGravity(planet, fragments, deltaTime);
         else
             updateGravity(planet, moon, deltaTime);
 
