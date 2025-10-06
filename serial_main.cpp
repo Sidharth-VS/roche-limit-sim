@@ -210,6 +210,8 @@ int main(){
     double startTime = glfwGetTime();
     int frameCount = 0;
     int totalFrameCount = 0;
+    double minFPS = 999999.0;
+    double maxFPS = 0.0;
 
     // ---------------- Render Loop ----------------
     while(!glfwWindowShouldClose(window)){
@@ -223,8 +225,12 @@ int main(){
         if (currentFrame - lastFPSTime >= 1.0) {
             double currentFPS = frameCount / (currentFrame - lastFPSTime);
             double avgFPS = totalFrameCount / (currentFrame - startTime);
+            if (currentFPS < minFPS) minFPS = currentFPS;
+            if (currentFPS > maxFPS) maxFPS = currentFPS;
             std::string title = "Roche Limit Simulator (SERIAL) - FPS: " + std::to_string((int)currentFPS) +
-                                " | Avg: " + std::to_string((int)avgFPS);
+                                " | Avg: " + std::to_string((int)avgFPS) +
+                                " | Min: " + std::to_string((int)minFPS) +
+                                " | Max: " + std::to_string((int)maxFPS);
             glfwSetWindowTitle(window, title.c_str());
             frameCount = 0;
             lastFPSTime = currentFrame;
