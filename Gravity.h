@@ -20,7 +20,7 @@ class Body{
     Body(glm::vec3 pos, glm::vec3 vel, float m):position(pos), velocity(vel), mass(m){}
     
 };
-const float G = 0.01f;
+const float G = 0.1f;
 
 void updateGravity(Body& planet, Body& moon, float dTime){
     glm::vec3 dir = planet.position - moon.position;
