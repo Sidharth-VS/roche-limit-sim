@@ -12,16 +12,17 @@
 ``g++ Moon_Maker_test.cpp src/glad.c -Iinclude -o moon_maker_test -lglfw -ldl -lGL``
 
 ## Test sample inputs
-Enter planet mass: 20
-Enter planet radius: 3
-Enter moon mass: 1
-Enter moon radius: 1
-Enter moon distance from planet: 9
-Enter moon velocity (Y component): 0.4
-Enter moon velocity (Z component): 0
+- Enter planet mass: 20 <br>
+- Enter planet radius: 3 <br>
+- Enter moon mass: 1 <br>
+- Enter moon radius: 1 <br>
+- Enter moon distance from planet: 9 <br>
+- Enter moon velocity (Y component): 0.4 <br>
+- Enter moon velocity (Z component): 0 <br>
 
-=== Simulation Parameters ===
-Roche Limit: 6.62318
-Moon Distance: 9
-Recommended orbital velocity for stable orbit: 0.471405
-Your velocity magnitude: 0.4
+=== Simulation Parameters === <br>
+- Roche Limit: 6.62318 <br>
+- Moon Distance: 9 <br>
+- Recommended orbital velocity for stable orbit: 0.471405 <br>
+- Your velocity magnitude: 0.4 <br>
+
